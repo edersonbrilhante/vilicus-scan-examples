@@ -1,0 +1,19 @@
+include:
+  - remote: https://raw.githubusercontent.com/edersonbrilhante/vilicus-gitlab/feature/add-template/Vilicus.gitlab-ci.yml  
+
+remote_image:
+  extends: .vilicus
+  variables:
+    IMAGE: python
+  tags:
+    - crosscicd
+
+local_image:
+  extends: .vilicus
+  variables:
+    IMAGE: localhost:5000/local-image:${CI_COMMIT_SHORT_SHA}
+  script:
+    - docker build -t localhost:5000/local-image:${CI_COMMIT_SHORT_SHA} .
+    - ./run-job.sh
+  tags:
+    - crosscicd
